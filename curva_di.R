@@ -3,6 +3,8 @@ library(rb3)
 library(bizdays)
 library(dplyr)
 library(ggplot2)
+library(ggthemes)
+library(scales)
 
 get_di1_curve <- function(refdate) {
   fut <- futures_get(refdate)
@@ -22,19 +24,20 @@ get_di1_curve <- function(refdate) {
 }
 
 
-dates <- bizseq("2022-08-01", "2022-08-16", "Brazil/ANBIMA")
+dates <- bizseq("2022-08-01", "2022-10-27", "Brazil/ANBIMA")
 curves <- lapply(seq_along(dates), function(ix) get_di1_curve(dates[ix]))
 
   {
     g <- autoplot(curves[[1]], curve.x.axis = "terms", colour = "red") +
       autolayer(curves[[1]], curve.geom = "point", curve.x.axis = "terms", colour = "red") +
       ylim(0.11, 0.14) +
-      theme_bw() +
+      theme_economist() +
+      scale_x_continuous(breaks =c(seq(252,3528,252)))+
       theme(legend.position = "none") +
       labs(
         x = "Prazos", y = NULL, title = "Curvas de Juros Prefixados DI1",
-        subtitle = "Entre as datas 2022-08-01 e 2022-08-16",
-        caption = "Desenvolvido por wilsonfreitas / Fonte: B3"
+        subtitle = "Entre as datas 2022-08-01 e 2022-10-27",
+        caption = "Fonte: B3"
       )
     print(g)
     
